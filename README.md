@@ -9,7 +9,7 @@ The library itself consist of next files:
 
 It use FRC1 timer interrupt to create precise PWM signal with specified frequency.
 
-IR code defines are based on https://github.com/shirriff/Arduino-IRremote by Ken Shirriff
+IR code defines are based on https://github.com/shirriff/Arduino-IRremote by Ken Shirriff  
 Makefile used from CHERTS ESP8266-Dev-Kit: https://github.com/CHERTS/esp8266-devkit
 
 The library is distributed as an example application that can be flashed to ESP8266:
