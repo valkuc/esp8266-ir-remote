@@ -1,5 +1,6 @@
 # esp8266-ir-remote
 Infrared remote control library for ESP8266 RTOS SDK
+
 The library itself consist of next files:
 
  - include/ir_remote.h
