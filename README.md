@@ -1,5 +1,5 @@
 # esp8266-ir-remote
-Infrared remote control library for ESP8266 RTOS SDK
+Infrared remote control library for ESP8266 SDK
 
 The library itself consist of next files:
 
@@ -14,7 +14,7 @@ Makefile used from CHERTS ESP8266-Dev-Kit: https://github.com/CHERTS/esp8266-dev
 
 The library is distributed as an example application that can be flashed to ESP8266:
 
- - modify Makefile according to your ESP8266 RTOS SDK environment
+ - modify Makefile according to your ESP8266 SDK environment
  - change serial port
  - run "make"
  - run "make flash"
