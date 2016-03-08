@@ -6,10 +6,10 @@
  * For details, see https://github.com/valkuc/esp8266-ir-remote
  */
 
-#include "esp_common.h"
-#include "freertos/FreeRTOS.h"
-
-#include "gpio.h"
+#include <ets_sys.h>
+#include <osapi.h>
+#include <os_type.h>
+#include <gpio.h>
 
 #include "ir_remote.h"
 #include "ir_remote_def.h"
@@ -31,13 +31,6 @@
 // 0xffffffff/(80000000/256)=35AF
 #define US_TO_RTC_TIMER_TICKS(t)	((t) ? (((t) > 0x35AF) ? (((t)>>2) * (TIMER_CLK_FREQ/250000) + ((t)&0x3) * (TIMER_CLK_FREQ / PWM_1S))  : (((t) *TIMER_CLK_FREQ) / PWM_1S)) : 0)
 #define FREQ_TO_TICKS(x)	US_TO_RTC_TIMER_TICKS((PWM_1S / (x)))
-
-// Compatibility defines with SDK
-#define RTC_CLR_REG_MASK(addr, val) CLEAR_PERI_REG_MASK(addr, val)
-#define RTC_REG_WRITE(addr, val) WRITE_PERI_REG(addr, val)
-#define ETS_FRC_TIMER1_INTR_ATTACH(x, y) _xt_isr_attach(ETS_FRC_TIMER1_INUM, (void*)x, y)
-#define ETS_FRC1_INTR_ENABLE() _xt_isr_unmask((1 << ETS_FRC_TIMER1_INUM))
-#define ETS_FRC1_INTR_DISABLE() _xt_isr_mask((1 << ETS_FRC_TIMER1_INUM))
 
 static uint32_t _frc1_ticks;
 static uint16_t _gpio_pin_num;
@@ -85,7 +78,7 @@ static void ICACHE_FLASH_ATTR set_carrier_frequence(uint16_t freq)
 	}
 }
 
-void ICACHE_FLASH_ATTR ir_remote_init(uint16_t pin_num, bool invert_logic_level)
+void ICACHE_FLASH_ATTR ir_remote_init(uint32_t pin_mux, uint8_t pin_func, uint16_t pin_num, bool invert_logic_level)
 {
 	_gpio_pin_num = pin_num;
 
@@ -93,11 +86,8 @@ void ICACHE_FLASH_ATTR ir_remote_init(uint16_t pin_num, bool invert_logic_level)
 	_logic_high = !_logic_low;
 	_pwm_lvl = _logic_low;
 
-	GPIO_ConfigTypeDef gpioCfg;
-	gpioCfg.GPIO_Pin = BIT(_gpio_pin_num);
-	gpioCfg.GPIO_Mode = GPIO_Mode_Output;
-	gpioCfg.GPIO_Pullup = GPIO_PullUp_DIS;
-	gpio_config(&gpioCfg);
+	gpio_init();
+	PIN_FUNC_SELECT(pin_mux, pin_func);
 	GPIO_OUTPUT_SET(_gpio_pin_num, _logic_low);
 
 	RTC_CLR_REG_MASK(FRC1_INT_ADDRESS, FRC1_INT_CLR_MASK);

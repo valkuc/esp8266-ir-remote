@@ -11,11 +11,13 @@
 
 /**
   * @brief  Initialize IR-remote.
-  * @param  pin_num: Board GPIO pin number (example: GPIO0 - 0, GPIO2 - 2 and so on).
+  * @param  pin_mux: Pin MUX. One of PERIPHS_IO_MUX_GPIO*
+  * 		pin_func: Pin FUNC. One of FUNC_GPIO*
+  * 		pin_num: Board GPIO pin number (example: GPIO0 - 0, GPIO2 - 2 and so on).
   *         invert_logic_level: Logic HIGH => LOW and logic LOW => HIGH. Suitable when IR-led is pulled-up by default.
   * @retval None
   */
-void ir_remote_init(uint16_t pin_num, bool invert_logic_level);
+void ir_remote_init(uint32_t pin_mux, uint8_t pin_func, uint16_t pin_num, bool invert_logic_level);
 
 /**
   * @brief  Send NEC code.
