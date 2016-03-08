@@ -1,7 +1,7 @@
 /*
  * ir_remote_def.h
  *
- * Version 1.0, 06.04.2015
+ * Version 1.1, 08.03.2016
  * Written by Valeriy Kucherenko
  * For details, see https://github.com/valkuc/esp8266-ir-remote
  *
@@ -10,24 +10,6 @@
 
 #ifndef __IR_REMOTE_DEF_H__
 #define __IR_REMOTE_DEF_H__
-
-#define CLOCK_DIV_1 	0
-#define CLOCK_DIV_16 	4
-#define CLOCK_DIV_256 	8
-
-#define TM_LEVEL_INT 	1
-#define TM_EDGE_INT 	0
-
-#define FRC1_ENABLE_TIMER	BIT7
-#define PWM_1S				1000000
-
-// 0xffffffff/(80000000/1)=35
-// 0xffffffff/(80000000/16)=35A
-// 0xffffffff/(80000000/256)=35AF
-#define US_TO_RTC_TIMER_TICKS(t)	((t) ? (((t) > 0x35AF) ? (((t)>>2) * (TIMER_CLK_FREQ/250000) + ((t)&0x3) * (TIMER_CLK_FREQ / PWM_1S))  : (((t) *TIMER_CLK_FREQ) / PWM_1S)) : 0)
-
-#define FREQ_TO_TICKS(x)	US_TO_RTC_TIMER_TICKS((PWM_1S / (x)))
-
 
 #define TOPBIT 0x80000000
 
@@ -57,5 +39,13 @@
 #define SAMSUNG_BIT_MARK  	560
 #define SAMSUNG_ONE_SPACE 	1600
 #define SAMSUNG_ZERO_SPACE  560
+
+#define RC5_FREQUENCY		36000
+#define RC5_T1				889
+
+#define RC6_FREQUENCY		36000
+#define RC6_HDR_MARK		2666
+#define RC6_HDR_SPACE		889
+#define RC6_T1				444
 
 #endif

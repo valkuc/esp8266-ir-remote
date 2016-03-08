@@ -1,7 +1,7 @@
 /*
  * ir_remote.h
  *
- * Version 1.0, 06.04.2015
+ * Version 1.1, 08.03.2016
  * Written by Valeriy Kucherenko
  * For details, see https://github.com/valkuc/esp8266-ir-remote
  */
@@ -11,11 +11,11 @@
 
 /**
   * @brief  Initialize IR-remote.
-  * @param  gpio_pin_num: Board GPIO pin number (example: GPIO0 - 0, GPIO2 - 2 and so on).
-  *         invert_gpio: Invert logic level - logic HIGH => LOW and logic LOW => HIGH. Suitable when IR-led is pulled-up by default.
+  * @param  pin_num: Board GPIO pin number (example: GPIO0 - 0, GPIO2 - 2 and so on).
+  *         invert_logic_level: Logic HIGH => LOW and logic LOW => HIGH. Suitable when IR-led is pulled-up by default.
   * @retval None
   */
-void ir_remote_init(uint16 gpio_pin_num, bool invert_gpio);
+void ir_remote_init(uint16_t pin_num, bool invert_logic_level);
 
 /**
   * @brief  Send NEC code.
@@ -48,6 +48,22 @@ void ir_remote_send_sony(uint32_t data, uint8_t nbits);
   * @retval None
   */
 void ir_remote_send_samsung(uint32_t data, uint8_t nbits);
+
+/**
+  * @brief  Send RC5 code.
+  * @param  data: Code to transmit.
+  *         nbits: Number of bits to transmit. Typically 32 bits.
+  * @retval None
+  */
+void ir_remote_send_rc5(uint32_t data, uint8_t nbits);
+
+/**
+  * @brief  Send RC6 code.
+  * @param  data: Code to transmit.
+  *         nbits: Number of bits to transmit. Typically 32 bits.
+  * @retval None
+  */
+void ir_remote_send_rc6(uint32_t data, uint8_t nbits);
 
 /**
   * @brief  Send raw data.
