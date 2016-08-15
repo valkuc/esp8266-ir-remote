@@ -24,13 +24,7 @@
 #define AUTO_RELOAD_CNT_TIMER	BIT6
 #define FRC1_ENABLE_TIMER		BIT7
 
-#define PWM_1S				1000000
-
-// 0xffffffff/(80000000/1)=35
-// 0xffffffff/(80000000/16)=35A
-// 0xffffffff/(80000000/256)=35AF
-#define US_TO_RTC_TIMER_TICKS(t)	((t) ? (((t) > 0x35AF) ? (((t)>>2) * (TIMER_CLK_FREQ/250000) + ((t)&0x3) * (TIMER_CLK_FREQ / PWM_1S))  : (((t) *TIMER_CLK_FREQ) / PWM_1S)) : 0)
-#define FREQ_TO_TICKS(x)	US_TO_RTC_TIMER_TICKS((PWM_1S / (x)))
+#define FREQ_TO_TICKS(x)	(((APB_CLK_FREQ>>CLOCK_DIV_1) / (x) * (1000 / 2)) / 1000)
 
 static uint32_t _frc1_ticks;
 static uint16_t _gpio_pin_num;
@@ -91,7 +85,7 @@ void ICACHE_FLASH_ATTR ir_remote_init(uint32_t pin_mux, uint8_t pin_func, uint16
 	GPIO_OUTPUT_SET(_gpio_pin_num, _logic_low);
 
 	RTC_CLR_REG_MASK(FRC1_INT_ADDRESS, FRC1_INT_CLR_MASK);
-	RTC_REG_WRITE(FRC1_CTRL_ADDRESS, CLOCK_DIV_256 | AUTO_RELOAD_CNT_TIMER | FRC1_ENABLE_TIMER | TM_EDGE_INT);
+	RTC_REG_WRITE(FRC1_CTRL_ADDRESS, CLOCK_DIV_1 | AUTO_RELOAD_CNT_TIMER | FRC1_ENABLE_TIMER | TM_EDGE_INT);
 	RTC_REG_WRITE(FRC1_LOAD_ADDRESS, 0);
 
 	ETS_FRC_TIMER1_INTR_ATTACH(pwm_tim1_intr_handler, NULL);
